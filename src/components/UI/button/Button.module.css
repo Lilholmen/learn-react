@@ -1,0 +1,7 @@
+.customButton {
+  padding: 5px 15px;
+  color: #86198f;
+  background: transparent;
+  border: 2px solid #86198f;
+  cursor: pointer;
+}
