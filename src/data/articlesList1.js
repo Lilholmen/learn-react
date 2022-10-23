@@ -7,12 +7,12 @@ const articlesList1 = [
   {
     id: 2,
     title: 'Second Article',
-    body: 'Text in article written by me from the vscode',
+    body: 'Article in article written by me from the vscode',
   },
   {
     id: 3,
     title: 'Third Article',
-    body: 'Text in article written by me from the vscode',
+    body: 'Post in article written by me from the vscode',
   },
 ];
 
