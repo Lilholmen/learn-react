@@ -1,13 +1,14 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
+import ArticleFilter from './components/ArticleFilter';
 import ArticlesList from './components/ArticlesList';
 import NewArticleForm from './components/NewArticleForm';
-import Select from './components/UI/select/Select';
 import articlesList1 from './data/articlesList1';
 import './styles/App.css';
 
 function App() {
   const [articles, setArticles] = useState(articlesList1);
-  const [selectedSort, setSelectedSort] = useState('');
+
+  const [filter, setFilter] = useState({ sort: '', query: '' });
 
   const addArticle = function (newArticle) {
     setArticles([...articles, newArticle]);
@@ -17,35 +18,33 @@ function App() {
     setArticles(articles.filter((item) => item.id !== article.id));
   };
 
-  const sortArticles = function (sort) {
-    setSelectedSort(sort);
-    setArticles([...articles].sort((a, b) => a[sort].localeCompare(b[sort])));
-  };
+  const sortedArticles = useMemo(() => {
+    if (filter.sort) {
+      return [...articles].sort((a, b) =>
+        a[filter.sort].localeCompare(b[filter.sort])
+      );
+    }
+    return articles;
+  }, [filter.sort, articles]);
+
+  const sortedArticlesWithSearch = useMemo(() => {
+    return sortedArticles.filter((article) =>
+      article.title
+        .toLocaleLowerCase()
+        .includes(filter.query.toLocaleLowerCase())
+    );
+  }, [filter.query, sortedArticles]);
 
   return (
     <div className="App">
       <NewArticleForm add={addArticle} />
       <hr style={{ margin: '15px 0' }} />
-      <div>
-        <Select
-          value={selectedSort}
-          onChange={sortArticles}
-          defaultOption="sort by"
-          options={[
-            { value: 'title', name: 'title' },
-            { value: 'body', name: 'text' },
-          ]}
-        />
-      </div>
-      {articles.length !== 0 ? (
-        <ArticlesList
-          remove={removeArticle}
-          articles={articles}
-          title="Articles List"
-        />
-      ) : (
-        <h1 style={{ textAlign: 'center' }}>No articles for today</h1>
-      )}
+      <ArticleFilter filter={filter} setFilter={setFilter} />
+      <ArticlesList
+        remove={removeArticle}
+        articles={sortedArticlesWithSearch}
+        title="Articles List"
+      />
     </div>
   );
 }
