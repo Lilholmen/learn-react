@@ -23,3 +23,22 @@
   justify-content: space-between;
   align-items: center;
 }
+
+.article-enter {
+  transform: translateX(-500px);
+}
+
+.article-enter-active {
+  transform: translateX(0px);
+  transition: all 500ms ease-in;
+}
+
+.article-exit {
+  opacity: 1;
+}
+
+.article-exit-active {
+  transform: translateY(-200px);
+  opacity: 0;
+  transition: all 500ms ease-in;
+}
